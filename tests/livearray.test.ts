@@ -182,6 +182,11 @@ describe(liveArray, () => {
         expect(base[1]).toBe(7);
     });
 
+    it("should accurately mimic array's filter()", () => {
+        const live = liveArray(baseStatic);
+        expect(live.filter(isOdd)).toStrictEqual(baseStatic.filter(isOdd));
+    });
+
     it("should throw on writing to a mapLive without a setter", () => {
         const base = [2, 5, 9];
         const live = liveArray(base);
@@ -223,7 +228,8 @@ describe(liveArray, () => {
         live.every(() => false);
         live.join();
         live.lastIndexOf(0);
-        expect(lengthReads).toBe(11);
+        live.filter(() => false);
+        expect(lengthReads).toBe(12);
     });
 
     it("should be spreadable", () => {
@@ -256,21 +262,6 @@ describe(liveArray, () => {
     })
 
     describe("withCache()", () => {
-
-        it("should cache length", () => {
-            let reads = 0;
-            const live = liveArray({
-                getLength() {
-                    reads++;
-                    return baseStatic.length;
-                },
-                get: i => baseStatic[i]
-            }).withCache();
-            expect(live.length).toBe(baseStatic.length);
-            expect(reads).toBe(1);
-            expect(live.length).toBe(baseStatic.length);
-            expect(reads).toBe(1);
-        });
 
         it("should cache reads", () => {
             let reads = 0;

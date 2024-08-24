@@ -35,6 +35,7 @@ The following methods mimic those of a normal array:
 
 * `map`
 * `forEach`
+* `filter`
 * `at`
 * `find`
 * `findIndex`

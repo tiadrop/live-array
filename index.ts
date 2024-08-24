@@ -27,6 +27,7 @@ type LiveArrayMethods<T> = {
 	[Symbol.iterator](): IterableIterator<T>;
 	mapLive<U>(get: (item: T, idx: number) => U, set?: (item: U, idx: number) => T): LiveArray<U>;
 	map<U>(fn: (item: T, idx: number) => U): U[];
+	filter(fn: (item: T, idx: number) => boolean): T[];
 	forEach(fn: (item: T, idx: number) => void): void;
 	at(idx: number): T;
 	find(fn: (item: T, idx: number) => boolean): T | undefined;
@@ -111,6 +112,15 @@ export function liveArray<T, U>(options: any[] | LiveArrayOptions<T>, mapFn?: (i
 		map<U>(fn: (item: T, idx: number) => U) {
             return [...this.mapLive(fn)];
         },
+		filter(fn) {
+			let results: T[] = [];
+			const length = getLength();
+			for (let i = 0; i < length; i++) {
+				const value = get(i);
+				if (fn(value, i)) results.push(value);
+			}
+			return results;
+		},
 		forEach(fn: (item: T, idx: number) => void) {
 			let l = getLength();
 			for (let i = 0; i < l; i++) fn(get(i), i);
