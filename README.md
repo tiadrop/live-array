@@ -126,7 +126,7 @@ const hashes = liveArray({
     }),
 })
 // invalidate cache entries where the key has changed
-.withCache(entry => entry.value.key == keys[entry.index])
+.withCache(entry => entry.value.key !== keys[entry.index])
 // but return only the hash
 .mapLive(v => v.hash);
 ```
