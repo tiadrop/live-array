@@ -55,8 +55,8 @@ Creates a new LiveArray that performs further transformation on read and write.
 If `set` is provided, changes carry both ways:
 ```ts
 const base = [2, 3, 4];
-const doubles = liveArray(base, n => n * 2, n => n / 2);
-                            //  ^ get       ^ set
+const doubles = liveArray(base).mapLive(n => n * 2, n => n / 2);
+                                    //  ^ get       ^ set
 console.log(doubles[0]); // 4
 doubles[0] = 100;
 console.log(base[0]); // 50
