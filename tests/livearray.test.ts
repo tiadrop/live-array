@@ -40,13 +40,13 @@ describe("liveArray(array)", () => {
 });
 
 describe("liveArray(options)", () => {
-    const createLive = (base: number[] = [...baseStatic]) => liveArray({
+    const createDoubles = (base: number[] = [...baseStatic]) => liveArray({
         getLength: () => base.length,
         get: index => base[index] * 2,
         set: (index, value) => base[index] = value / 2
     });
 
-    const liveStatic = createLive();
+    const liveStatic = createDoubles();
 
     it("should provide the correct length", () => {
         expect(liveStatic.length).toBe(baseStatic.length);
@@ -58,7 +58,7 @@ describe("liveArray(options)", () => {
 
     it("should set() correctly", () => {
         const base = [1, 3, 5, 6, 7];
-        const live = createLive(base);
+        const live = createDoubles(base);
         live[3] = 100;
         expect(base[3]).toBe(50);
     });
@@ -217,6 +217,7 @@ describe(liveArray, () => {
             },
             get: i => baseStatic[i],
         });
+        [...live]; // including iterator
         live.forEach(() => {});
         live.map(() => {});
         live.find(() => false);
@@ -225,11 +226,11 @@ describe(liveArray, () => {
         live.indexOf(0);
         live.reduce(() => 0);
         live.some(() => false);
-        live.every(() => false);
+        live.every(() => true);
         live.join();
         live.lastIndexOf(0);
         live.filter(() => false);
-        expect(lengthReads).toBe(12);
+        expect(lengthReads).toBe(13);
     });
 
     it("should be spreadable", () => {
@@ -243,21 +244,13 @@ describe(liveArray, () => {
         expect(liveArray(baseStatic)).not.toContain(11);
     });
 
-    it("should accurately mimic array's forEach() and only call getLength() once", () => {
+    it("should accurately mimic array's forEach()", () => {
         const base = ["a", "b", "z"];
-        let lengthReads = 0;
-        const live = liveArray({
-            getLength(){
-                lengthReads++;
-                return base.length;
-            },
-            get: i => base[i],
-        });
+        const live = liveArray(base);
         let str = "";
         live.forEach((item, i) => {
             str += item + i;
         });
-        expect(lengthReads).toBe(1);
         expect(str).toBe("a0b1z2");
     })
 
