@@ -6,7 +6,7 @@
     "test": "npx jest"
   },
   "author": "Aleta <aletabix@pm.me>",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@swc/core": "^1.7.14",
     "@swc/jest": "^0.2.36",
