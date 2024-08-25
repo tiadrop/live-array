@@ -45,6 +45,7 @@ type LiveArrayMethods<T> = {
 	sliceLive(start: number, end?: number): LiveArray<T>;
 	reverseLive(): LiveArray<T>;
 	withCache(invalidator?: (context: LiveArrayCacheContext<T>) => (boolean | undefined)): LiveArray<T>;
+	toJSON(): T[];
 }
 
 type LiveArrayCacheContext<T> = {
@@ -266,7 +267,9 @@ export function liveArray<T, U>(options: any[] | LiveArrayOptions<T>, mapFn?: (i
 					// return length;
 				}
 			})
-
+		},
+		toJSON() {
+			return [...this];
 		}
 	};
 	const proxy = new Proxy(

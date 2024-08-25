@@ -233,6 +233,14 @@ describe(liveArray, () => {
         expect(lengthReads).toBe(13);
     });
 
+    it("should serialise to JSON as an array", () => {
+        const object = {
+            data: liveArray([3, 7], v => v * 2)
+        };
+        const json = JSON.stringify(object);
+        expect(json).toEqual(JSON.stringify({data: [6, 14]}));
+    });
+
     it("should be spreadable", () => {
         const live = liveArray([3, -1]);
         const string = "abcdefghijklmnop";
