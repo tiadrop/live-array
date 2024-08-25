@@ -80,38 +80,38 @@ export function liveArray<T, U>(options: any[] | LiveArrayOptions<T>, mapFn?: (i
 			set: (i, v) => source[i] = v,
 		}
 	}
-	const {get, set, getLength} = {
-		set: () => { throw new Error("This LiveArray is read-only" )},
+	const { get, set, getLength } = {
+		set: () => { throw new Error("This LiveArray is read-only") },
 		...options
 	};
 
 	const methods: LiveArrayMethods<T> = {
-		[Symbol.iterator](){
+		[Symbol.iterator]() {
 			let i = 0;
 			const length = getLength();
 			return {
-				next(){
+				next() {
 					return i >= length ? { done: true, value: undefined } : {
 						value: get(i++)
 					};
 				},
-				[Symbol.iterator](){ return this }
+				[Symbol.iterator]() { return this }
 			};
 		},
 		mapLive<U>(fn: (item: T, idx: number) => U, setter?: (item: U, idx: number) => T) {
-            return liveArray({
-                getLength: getLength,
-                get: i => fn(get(i), i),
-                set: setter ? ((idx: number, value: U) => {
-                    set(idx, setter(value, idx));
-                }) : (() => {
-                    throw new Error("This LiveArray map is read-only")
-                })
-            });
-        },
+			return liveArray({
+				getLength: getLength,
+				get: i => fn(get(i), i),
+				set: setter ? ((idx: number, value: U) => {
+					set(idx, setter(value, idx));
+				}) : (() => {
+					throw new Error("This LiveArray map is read-only")
+				})
+			});
+		},
 		map<U>(fn: (item: T, idx: number) => U) {
-            return [...this.mapLive(fn)];
-        },
+			return [...this.mapLive(fn)];
+		},
 		filter(fn) {
 			let results: T[] = [];
 			const length = getLength();
@@ -159,13 +159,13 @@ export function liveArray<T, U>(options: any[] | LiveArrayOptions<T>, mapFn?: (i
 			return -1;
 		},
 		reduce(fn: (accum: any, item: T, idx: number) => T, initial?: any) {
-            let [accum, start] = initial === undefined ? [get(0), 1] : [initial, 0];
-            let length = getLength();
-            for (let i = start; i < length; i++) {
-                accum = fn(accum, get(i), i);
-            }
-            return accum;
-        },
+			let [accum, start] = initial === undefined ? [get(0), 1] : [initial, 0];
+			let length = getLength();
+			for (let i = start; i < length; i++) {
+				accum = fn(accum, get(i), i);
+			}
+			return accum;
+		},
 		includes(item, fromIndex = 0) {
 			const length = getLength();
 			for (let i = fromIndex; i < length; i++) {
@@ -234,7 +234,7 @@ export function liveArray<T, U>(options: any[] | LiveArrayOptions<T>, mapFn?: (i
 			const cache: Map<number, Entry> = new Map();
 			const setCache = (i: number, v: T) => {
 				cache.set(i, {
-					get value(){ return v },
+					get value() { return v },
 					timeCached: Date.now(),
 				});
 			}
@@ -243,7 +243,7 @@ export function liveArray<T, U>(options: any[] | LiveArrayOptions<T>, mapFn?: (i
 					if (invalidator && cache.has(i)) {
 						const entry = cache.get(i) as Entry;
 						if (invalidator({
-							get value(){ return entry.value },
+							get value() { return entry.value },
 							cacheCount: cache.size,
 							index: i,
 							ageMs: Date.now() - entry.timeCached,
@@ -266,7 +266,7 @@ export function liveArray<T, U>(options: any[] | LiveArrayOptions<T>, mapFn?: (i
 					// return length;
 				}
 			})
-		
+
 		}
 	};
 	const proxy = new Proxy(
