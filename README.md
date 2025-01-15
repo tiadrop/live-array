@@ -8,7 +8,13 @@ A live array behaves similarly to a normal array, exposing a `length` property, 
 
 This is useful, for example, when an array-like interface is needed but the potential size of calculated values makes it unfeasible to store them all in a standard mapped array, or if the mapping process is wastefully expensive while only some elements will ever be accessed.
 
+```
+$ npm i @xtia/live-array
+```
+
 ```ts
+import { liveArray } from "@xtia/live-array";
+
 const ids = ["main", "my-form", "my-submit-button"];
 
 const elements = liveArray(ids, id => document.getElementById(id));
