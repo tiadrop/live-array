@@ -261,11 +261,7 @@ export function liveArray<T, U>(options: any[] | LiveArrayOptions<T>, mapFn?: (i
 					set(i, v);
 					setCache(i, v);
 				},
-				getLength: () => {
-					return getLength();
-					// if (length === undefined) length = getLength();
-					// return length;
-				}
+				getLength,
 			})
 		},
 		toJSON() {
@@ -285,3 +281,18 @@ export function liveArray<T, U>(options: any[] | LiveArrayOptions<T>, mapFn?: (i
 	return proxy;
 };
 
+export type Lazy<T> = { readonly value: T };
+
+export function lazy<T>(get: () => T) {
+    let value: T;
+    let evaluated: boolean = false;
+    return {
+        get value() {
+            if (!evaluated) {
+                evaluated = true;
+                value = get();
+            }
+            return value;
+        }
+    } as Lazy<T>;
+}

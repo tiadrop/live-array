@@ -1,11 +1,12 @@
 {
-  "name": "live-array",
-  "version": "1.0.0",
+  "name": "@xtia/live-array",
+  "version": "1.0.1",
   "description": "Lazy list transformation",
   "scripts": {
-    "test": "npx jest"
+    "test": "npx jest",
+    "build": "npx tsc"
   },
-  "author": "Aleta <aletabix@pm.me>",
+  "author": "Aleta",
   "license": "MIT",
   "devDependencies": {
     "@swc/core": "^1.7.14",
