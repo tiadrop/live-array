@@ -1,10 +1,14 @@
 {
   "name": "@xtia/live-array",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "index.js",
   "repository": {
     "url": "https://github.com/tiadrop/live-array",
     "type": "github"
+  },
+  "scripts": {
+    "prepublishOnly": "cp ../README.md .",
+    "postpublish": "rm README.md"
   },
   "description": "Lazy list transformation",
   "author": "Aleta Lovelace",
