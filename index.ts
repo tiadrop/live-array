@@ -71,8 +71,20 @@ export type LiveArray<T> = Readonly<LiveArrayMethods<T>> & {
 
 export function liveArray<T>(options: LiveArrayOptions<T>): LiveArray<T>
 export function liveArray<T>(source: T[]): LiveArray<T>
-export function liveArray<T, U>(source: T[], mapFn: (item: T) => U, unmapFn?: (item: U) => T): LiveArray<U>
-export function liveArray<T, U>(options: any[] | LiveArrayOptions<T>, mapFn?: (item: T) => U, unmapFn?: (item: U) => T): LiveArray<U> {
+export function liveArray<T, U>(source: T[], mapFn: (item: T, index: number) => U, unmapFn?: (item: U, index: number) => T): LiveArray<U>
+export function liveArray<T>(length: number, get: (index: number) => T): LiveArray<T>
+export function liveArray<T, U>(
+	options: T[] | LiveArrayOptions<T> | number,
+	mapFn?: ((item: T, index: number) => U) | ((index: number) => T),
+	unmapFn?: (item: U, index: number) => T
+): LiveArray<U> {
+	if (typeof options === "number") {
+		options = ({
+			getLength: () => options,
+			get: (i) => (mapFn as any)(i),
+		}) as LiveArrayOptions<T>;
+	}
+
 	if (Array.isArray(options)) {
 		const source = options;
 		options = {
@@ -276,8 +288,8 @@ export function liveArray<T, U>(options: any[] | LiveArrayOptions<T>, mapFn?: (i
 			}
 		}),
 		laProxy
-	) as unknown as LiveArray<U>;
-	if (mapFn !== undefined) return methods.mapLive(mapFn, unmapFn);
+	) as LiveArray<U>;
+	if (mapFn !== undefined) return methods.mapLive(mapFn as any, unmapFn);
 	return proxy;
 };
 
