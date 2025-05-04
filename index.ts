@@ -285,12 +285,12 @@ export type Lazy<T> = { readonly value: T };
 
 export function lazy<T>(get: () => T) {
     let value: T;
-    let evaluated: boolean = false;
+	let getOrNull: (() => T) | null = get;
     return {
         get value() {
-            if (!evaluated) {
-                evaluated = true;
-                value = get();
+            if (getOrNull) {
+                value = getOrNull();
+				getOrNull = null; // deref getter for GC
             }
             return value;
         }
